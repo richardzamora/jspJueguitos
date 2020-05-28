@@ -27,8 +27,9 @@ ALTER TABLE public.usuario
 CREATE TABLE public.empresas
 (
     id serial NOT NULL,
-    name character varying(100) COLLATE pg_catalog."default",
-    CONSTRAINT pk_empresas PRIMARY KEY (id)
+    name character varying(100),
+    CONSTRAINT pk_empresas PRIMARY KEY (id),
+	CONSTRAINT name_empresa UNIQUE (name)
 )
 WITH (
     OIDS = FALSE
@@ -44,9 +45,9 @@ ALTER TABLE public.empresas
 CREATE TABLE public.generos
 (
     id serial NOT NULL,
-    name character varying(100) COLLATE pg_catalog."default",
+    name character varying(100),
     CONSTRAINT pk_generos PRIMARY KEY (id),
-    CONSTRAINT name UNIQUE (name)
+    CONSTRAINT name_genero UNIQUE (name)
 )
 WITH (
     OIDS = FALSE
