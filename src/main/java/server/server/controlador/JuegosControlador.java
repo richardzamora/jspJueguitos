@@ -6,6 +6,7 @@ import server.server.estructura.stack.IStackArray;
 
 import javax.swing.*;
 import java.sql.Date;
+import java.util.ArrayList;
 
 public class JuegosControlador<T> {
 	
@@ -14,14 +15,14 @@ public class JuegosControlador<T> {
 	public JuegosControlador() {
 		dao = new JuegosDao<T>();
 	}
-	
-	public boolean insert(int id, String name, String description, Date release_date, ImageIcon image, double calification, int empresa, int genero) {
-		JuegosDto date = new JuegosDto(id, name, description, release_date, image, calification, empresa, genero);
+
+	public boolean insert( String name, String description, Date release_date, double calification, int empresa, int genero) {
+		JuegosDto date = new JuegosDto(name, description, release_date, calification, empresa, genero);
 		return dao.insert(date);
 	}
 	
-	public boolean update(int id, String name, String description, Date release_date, ImageIcon image, double calification, int empresa, int genero) {
-		JuegosDto date = new JuegosDto(id, name, description, release_date, image, calification, empresa, genero);
+	public boolean update(int id, String name, String description, Date release_date, double calification, int empresa, int genero) {
+		JuegosDto date = new JuegosDto(id, name, description, release_date, calification, empresa, genero);
 		return dao.update(date);
 	}
 	

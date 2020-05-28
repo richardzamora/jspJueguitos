@@ -1,6 +1,7 @@
 package servlets.genero;
 
 import org.omg.Messaging.SyncScopeHelper;
+import server.server.controlador.GeneroControlador;
 import server.server.dao.GeneroDao;
 import server.server.dto.GeneroDto;
 import server.server.estructura.stack.IStackArray;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 @WebServlet(urlPatterns = "/genero.do")
 public class GeneroServlet extends HttpServlet {
 
-    private final GeneroDao generoDao = new GeneroDao();
+    private final GeneroControlador generoControlador = new GeneroControlador();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -26,9 +27,7 @@ public class GeneroServlet extends HttpServlet {
         if (title == null) {
             req.setAttribute("title", "Add Generos");
         }
-        System.out.println("Despues de ajustar el titulo");
         String action = req.getParameter("action");
-        System.out.println("Acción: "+ action);
         switch (req.getParameter("action")) {
             case "Listar":
                 System.out.println("Case Listar");
@@ -46,34 +45,28 @@ public class GeneroServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = req.getParameter("action");
-        GeneroDto genero = new GeneroDto();
-        genero.setName(req.getParameter("name"));
+
+        String name = req.getParameter("name");
         if (action.equals("Update")) {
-            System.out.println(req.getParameter("id") + " y" + genero.getName());
-            genero.setId(Integer.parseInt(req.getParameter("id")));
-            generoDao.update(genero);
+            int id =Integer.parseInt(req.getParameter("id"));
+            generoControlador.update(id, name);
         } else {
-            generoDao.insert(genero);
+            generoControlador.insert(name);
         }
         req.setAttribute("title", "Add Generos");
         list(req, resp);
     }
 
     private void list(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("Entró al metodo list");
         int page = 1;
         int recordsPerPage = 7;
         if(req.getParameter("page") != null) {
             page = Integer.parseInt(req.getParameter("page"));
-            System.out.println("El numero de la pagina es: "+ page);
         }
         try {
-            System.out.println("Entró al bloque try");
-            IStackArray<GeneroDto> generosStack = generoDao.findAll(new GeneroDto());
+            IStackArray<GeneroDto> generosStack = generoControlador.findAll();
             int noOfRecords = generosStack.size();
-            System.out.println("Número de elementos: "+ noOfRecords);
             int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
-
             ArrayList<GeneroDto> generos = generosStack.hacerArrayList();
             req.setAttribute("generos", generos);
             req.setAttribute("noOfPages", noOfPages);
@@ -86,13 +79,10 @@ public class GeneroServlet extends HttpServlet {
 
     private void update(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-            req.setAttribute("title", "Update Generos");
-            int id = Integer.parseInt(req.getParameter("value"));
-            GeneroDto generoConId = new GeneroDto();
-            generoConId.setId(id);
-            GeneroDto generodto = (GeneroDto)generoDao.findById((generoConId));
-            req.setAttribute("genero", generodto);
-
+        req.setAttribute("title", "Update Generos");
+        int id = Integer.parseInt(req.getParameter("value"));
+        GeneroDto generodto = generoControlador.findById(id);
+        req.setAttribute("genero", generodto);
         list(req, resp);
     }
 
@@ -101,7 +91,7 @@ public class GeneroServlet extends HttpServlet {
         int id = Integer.parseInt(req.getParameter("value"));
         GeneroDto genero = new GeneroDto();
         genero.setId(id);
-        generoDao.delete(genero);
+        generoControlador.delete(id);
         req.setAttribute("genero", genero);
         list(req, resp);
     }

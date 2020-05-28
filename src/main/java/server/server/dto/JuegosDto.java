@@ -38,7 +38,36 @@ public class JuegosDto implements Crud {
 		this.genero = genero;
 		
 	}
+	public JuegosDto(int id, String name, String description, Date release_date, double calification, int empresa, int genero) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.description = description;
+		this.releaseDate = release_date;
+		this.calification = calification;
+		this.empresa = empresa;
+		this.genero = genero;
 
+	}
+	public JuegosDto(String name, String description, Date release_date, ImageIcon image, double calification, int empresa, int genero) {
+		super();
+		this.name = name;
+		this.description = description;
+		this.releaseDate = release_date;
+		this.imageRendered = image;
+		this.calification = calification;
+		this.empresa = empresa;
+		this.genero = genero;
+	}
+	public JuegosDto(String name, String description, Date release_date, double calification, int empresa, int genero) {
+		super();
+		this.name = name;
+		this.description = description;
+		this.releaseDate = release_date;
+		this.calification = calification;
+		this.empresa = empresa;
+		this.genero = genero;
+	}
 	public int getId() {
 		return id;
 	}
@@ -123,16 +152,16 @@ public class JuegosDto implements Crud {
 	@Override
 	public String insert() {
 		
-		return "INSERT INTO juegos(name, description, release_date, image, calification, empresa, genero)"+
+		return "INSERT INTO juegos(name, description, release_date, calification, empresa, genero)"+
                 " VALUES ('"+ name + "', '" + description +
-                "' , '" + releaseDate + "', '" + image + "' , '" + calification + "' , '"+ empresa + "' , '"+ genero + "');";
+                "' , '" + releaseDate +  "' , '" + calification + "' , '"+ empresa + "' , '"+ genero + "');";
 	}
 
 	@Override
 	public String update() {
 		return "UPDATE juegos SET name = '"+ name + "', description ='" + description +
 				"', release_date ='" + releaseDate +
-				"', image ='" + image + "', calification ='" + calification + "', empresa = '" + empresa + "', genero = '" + 
+				 "', calification ='" + calification + "', empresa = '" + empresa + "', genero = '" +
 				genero +"' WHERE id='" + id + "';";
 	}
 

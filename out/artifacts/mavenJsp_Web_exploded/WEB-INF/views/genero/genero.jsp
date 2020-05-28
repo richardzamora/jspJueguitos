@@ -8,7 +8,7 @@
             <tr>
                 <th scope="col">ID</th>
                 <th scope="col">Name</th>
-                <th scope="col">Eliminar</th>
+                <th scope="col">Opciones</th>
             </tr>
             </thead>
             <tbody>

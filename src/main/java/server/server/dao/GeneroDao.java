@@ -1,6 +1,5 @@
 package server.server.dao;
 
-import model.vehiclesbrands.VehiclesBrand;
 import server.server.dto.GeneroDto;
 
 import java.sql.ResultSet;

@@ -12,11 +12,12 @@ public class GeneroControlador<T> {
 		dao = new GeneroDao<T>();
 	}
 	
-	public boolean insert(int id, String name) {
-		GeneroDto date = new GeneroDto( id, name);
+	public boolean insert( String name) {
+		GeneroDto date = new GeneroDto();
+		date.setName(name);
 		return dao.insert(date);
 	}
-	
+
 	public boolean update(int id, String name) {
 		GeneroDto date = new GeneroDto( id, name);
 		return dao.update(date);

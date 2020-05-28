@@ -8,6 +8,8 @@
             <tr>
                 <th scope="col">ID</th>
                 <th scope="col">Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">ReleaseDate</th>
                 <th scope="col">Calification</th>
                 <th scope="col">Empresa</th>
                 <th scope="col">Genero</th>
@@ -20,6 +22,8 @@
                 <tr>
                     <td>${juego.id}</td>
                     <td>${juego.name}</td>
+                    <td>${juego.description}</td>
+                    <td>${juego.releaseDate}</td>
                     <td>${juego.calification}</td>
                     <td>${juego.empresa}</td>
                     <td>${juego.genero}</td>
@@ -75,17 +79,29 @@
                     <input type="text" value="${juego.name}" name="name" class="form-control">
                 </div>
                 <div class="form-group text-light bg-dark">
+                    <label>Description</label>
+                    <input type="text" value="${juego.description}" name="description" class="form-control">
+                </div>
+                <div class="form-group text-light bg-dark">
+                    <label>ReleaseDate</label>
+                    <input type="text" value="${juego.releaseDate}" name="releaseDate" class="form-control " placeholder="YYYY-MM-DD">
+                </div>
+                <div class="form-group text-light bg-dark">
                     <label>Calification</label>
                     <input type="text" value="${juego.calification}" name="calification" class="form-control">
                 </div>
-                <div class="form-group text-light bg-dark">
-                    <label>Empresa</label>
-                    <input type="text" value="${juego.empresa}" name="empresa" class="form-control">
-                </div>
-                <div class="form-group text-light bg-dark">
-                    <label>genero</label>
-                    <input type="text" value="${juego.genero}" name="genero" class="form-control">
-                </div>
+                <select class="custom-select mb-4" name="empresa">
+                    <option selected>Empresas</option>
+                        <c:forEach items="${empresas}" var="empresa">
+                        <option value="${empresa.id}">${empresa.name}</option>
+                        </c:forEach>
+                </select>
+                <select class="custom-select mb-4" name="genero">
+                    <option selected>Generos</option>
+                    <c:forEach items="${generos}" var="genero">
+                        <option value="${genero.id}">${genero.name}</option>
+                    </c:forEach>
+                </select>
                 <c:if test = "${title == 'Add Juegos'}">
                     <input type="submit" name="action" value="Add" class="btn btn-success">
                 </c:if>

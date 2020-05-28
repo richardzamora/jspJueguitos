@@ -12,8 +12,9 @@ public class EmpresasControlador<T> {
 		dao = new EmpresasDao<T>();
 	}
 
-	public boolean insert(int id, String name) {
-		EmpresasDto date = new EmpresasDto( id, name);
+	public boolean insert(String name) {
+		EmpresasDto date = new EmpresasDto();
+		date.setName(name);
 		return dao.insert(date);
 	}
 	

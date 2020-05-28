@@ -1,6 +1,5 @@
 package server.server.dao;
 
-import model.vehiclesbrands.VehiclesBrand;
 import model.conexion.Conexion;
 import server.server.dto.GeneroDto;
 import server.server.dto.UsuarioDto;
@@ -55,7 +54,6 @@ public class GenericDao<T> {
 	protected Crud getQuerySingle(ResultSet rs)
 	{
 		T newObjet = null;
-
 		try 
 		{
 			ResultSetMetaData rsMD = rs.getMetaData();

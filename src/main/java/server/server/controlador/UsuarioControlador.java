@@ -18,7 +18,14 @@ public class UsuarioControlador<T> {
 		UsuarioDto date = new UsuarioDto( mail, last_name, nickname, mail, password, birthDate );
 		return dao.insert(date);
 	}
-	
+
+	public boolean autentication(String mail, String password)
+	{
+		UsuarioDto date = new UsuarioDto();
+		date.setMail(mail);
+		date.setPassword(password);
+		return dao.getAutentication(date);
+	}
 	public boolean update(String name, String last_name, String nickname, String mail, String password, Date birthDate) {
 		UsuarioDto date = new UsuarioDto( mail, last_name, nickname, mail, password, birthDate);
 		return dao.update(date);

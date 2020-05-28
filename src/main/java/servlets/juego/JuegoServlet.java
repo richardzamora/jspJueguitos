@@ -1,7 +1,12 @@
 package servlets.juego;
 
 import org.omg.Messaging.SyncScopeHelper;
+import server.server.controlador.EmpresasControlador;
+import server.server.controlador.GeneroControlador;
+import server.server.controlador.JuegosControlador;
 import server.server.dao.JuegosDao;
+import server.server.dto.EmpresasDto;
+import server.server.dto.GeneroDto;
 import server.server.dto.JuegosDto;
 import server.server.estructura.stack.IStackArray;
 
@@ -10,25 +15,26 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.swing.*;
 import java.io.IOException;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 @WebServlet(urlPatterns = "/juego.do")
 public class JuegoServlet extends HttpServlet {
 
-    private final JuegosDao juegoDao = new JuegosDao();
+    private final JuegosControlador juegosControlador = new JuegosControlador();
+    private final EmpresasControlador empresasControlador = new EmpresasControlador();
+    private final GeneroControlador generoControlador = new GeneroControlador();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("Entró al doGet");
         String title = req.getParameter("title");
         if (title == null) {
             req.setAttribute("title", "Add Juegos");
         }
-        System.out.println("Despues de ajustar el titulo");
         String action = req.getParameter("action");
-        System.out.println("Acción: "+ action);
         switch (req.getParameter("action")) {
             case "Listar":
                 System.out.println("Case Listar");
@@ -45,36 +51,50 @@ public class JuegoServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
         String action = req.getParameter("action");
-        JuegosDto juego = new JuegosDto();
-        juego.setName(req.getParameter("name"));
+        String name = req.getParameter("name");
+        String description = req.getParameter("description");
+
+        String releaseDate = req.getParameter("releaseDate");
+        System.out.println(releaseDate);
+        Date dateToDataBase = Date.valueOf(releaseDate);
+        System.out.println(dateToDataBase.toString());
+        Double calification = Double.parseDouble(req.getParameter("calification"));
+
+        int empresa = Integer.parseInt(req.getParameter("empresa"));
+
+        int genero = Integer.parseInt(req.getParameter("genero"));
+
         if (action.equals("Update")) {
-            System.out.println(req.getParameter("id") + " y" + juego.getName());
-            juego.setId(Integer.parseInt(req.getParameter("id")));
-            juegoDao.update(juego);
+            int id = Integer.parseInt(req.getParameter("id"));
+            juegosControlador.update(id,name,description,dateToDataBase,calification,empresa,genero);
         } else {
-            juegoDao.insert(juego);
+            juegosControlador.insert(name,description,dateToDataBase,calification,empresa,genero);
         }
         req.setAttribute("title", "Add Juegos");
         list(req, resp);
     }
 
     private void list(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("Entró al metodo list");
         int page = 1;
         int recordsPerPage = 7;
         if(req.getParameter("page") != null) {
             page = Integer.parseInt(req.getParameter("page"));
-            System.out.println("El numero de la pagina es: "+ page);
         }
         try {
-            System.out.println("Entró al bloque try");
-            IStackArray<JuegosDto> juegosStack = juegoDao.findAll(new JuegosDto());
+            IStackArray<JuegosDto> juegosStack = juegosControlador.findAll();
             int noOfRecords = juegosStack.size();
-            System.out.println("Número de elementos: "+ noOfRecords);
             int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
+            ArrayList<JuegosDto> juegosDto = juegosStack.hacerArrayList();
+            ArrayList<VistaJuego> juegos = VistaJuego.pasarJuegos(juegosDto);
 
-            ArrayList<JuegosDto> juegos = juegosStack.hacerArrayList();
+            ArrayList<EmpresasDto> empresas = empresasControlador.findAll().hacerArrayList();
+            req.setAttribute("empresas", empresas);
+
+            ArrayList<GeneroDto> generos = generoControlador.findAll().hacerArrayList();
+            req.setAttribute("generos", generos);
+
             req.setAttribute("juegos", juegos);
             req.setAttribute("noOfPages", noOfPages);
             req.setAttribute("currentPage", page);
@@ -90,7 +110,7 @@ public class JuegoServlet extends HttpServlet {
         int id = Integer.parseInt(req.getParameter("value"));
         JuegosDto juegoConId = new JuegosDto();
         juegoConId.setId(id);
-        JuegosDto juegodto = (JuegosDto)juegoDao.findById((juegoConId));
+        JuegosDto juegodto = juegosControlador.findById(id);
         req.setAttribute("juego", juegodto);
 
         list(req, resp);
@@ -101,7 +121,7 @@ public class JuegoServlet extends HttpServlet {
         int id = Integer.parseInt(req.getParameter("value"));
         JuegosDto juego = new JuegosDto();
         juego.setId(id);
-        juegoDao.delete(juego);
+        juegosControlador.delete(id);
         req.setAttribute("juego", juego);
         list(req, resp);
     }
