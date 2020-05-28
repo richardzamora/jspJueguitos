@@ -11,7 +11,7 @@
 
                 <div class="form-group text-light bg-dark">
                     <label>User:</label>
-                    <input  type="text" placeholder="Username" name="user" class="form-control" value="losHomes">
+                    <input  type="text" placeholder="Username" name="user" class="form-control" value="cristiangomez@gmail.com">
                 </div>
                 <div class="form-group text-light bg-dark">
                     <label>Password:</label>

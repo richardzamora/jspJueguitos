@@ -93,13 +93,13 @@
                 <select class="custom-select mb-4" name="empresa">
                     <option selected>Empresas</option>
                         <c:forEach items="${empresas}" var="empresa">
-                        <option value="${empresa.id}">${empresa.name}</option>
+                        <option value="${empresa.id}" <c:if test="${juego.empresa == empresa.id }">selected</c:if>>${empresa.name}</option>
                         </c:forEach>
                 </select>
                 <select class="custom-select mb-4" name="genero">
                     <option selected>Generos</option>
                     <c:forEach items="${generos}" var="genero">
-                        <option value="${genero.id}">${genero.name}</option>
+                        <option value="${genero.id}" <c:if test="${juego.genero == genero.id }">selected</c:if>>${genero.name}</option>
                     </c:forEach>
                 </select>
                 <c:if test = "${title == 'Add Juegos'}">
